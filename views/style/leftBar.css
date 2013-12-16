@@ -1,0 +1,31 @@
+#leftBar {
+	color:#EEEEEE;
+	display:inline;
+	float:left;
+	/* voithitiko border - TODO : svisto */
+	border-right: 2px solid #DDDDDD;
+	height:auto;
+	width:211px;
+	padding : 4px 0px 0px 0;
+}
+
+#chatRoomList {
+list-style: none;
+padding:0;
+}
+
+#leftBar h2 {
+	font-size: 22px;
+	margin-bottom:0px;
+	padding-left:35px;
+	
+}
+#leftBar li {
+	/* mpainei edw k oxi sto #leftbar gia na clickaretai apo olo
+	to platos to link */
+	padding:0px 10px 3px 40px;
+}
+#leftBar li:HOVER {
+	color:white;
+	background-color: rgba(0, 0, 70, 0.5);
+}

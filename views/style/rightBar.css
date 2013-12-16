@@ -1,0 +1,30 @@
+#rightBar {
+	color:#EEEEEE;
+	display:inline;
+	float:right;
+	/* voithitiko border - TODO : svisto */
+	border-left: 2px solid #DDDDDD;
+	padding : 4px 0px 0px 0;
+	height:auto;
+	width:271px;
+}
+#pmList {
+	list-style: none;
+	padding:0;
+}
+#rightBar h2 {
+	font-size: 22px;
+	margin-bottom:0px;
+	padding-left:20px;
+	
+}
+#rightBar li {
+	/* to padmpainei edw k oxi sto #leftbar gia na clickaretai apo olo
+	to platos to link */
+	/* TODO : fix bug me megalo name */
+	padding:0px 0px 3px 30px;
+}
+#rightBar li:HOVER {
+	color:white;
+	background-color: rgba(0, 0, 70, 0.5);
+}

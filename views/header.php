@@ -4,24 +4,22 @@
     <head>
         <title>Live chat</title>
         <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-        <link type="text/css" rel="stylesheet" href="style/globalStyle.css" />
+        <link type="text/css" rel="stylesheet" href="views/style/global.css" />
+        <link type="text/css" rel="stylesheet" href="views/style/header.css" />
     </head>
     <body>
     	<div id="topBar">
-    		<ul id="headerMenu">
-    			<li><h1><a href="../index.php">TroLLChat</a></h1></li>
-    			<li><a href="../index.php">Profile</a></li>
-    			<li><a href="../index.php">Bookmarks</a></li>
-    			<li><a href="../index.php">Contact Admin</a></li>
-    			<li><a href="../index.php">Logout</a></li>
+    		<ul id="headerMenuList">
+    			<li><h1><a href="index.php">Live Chat</a></h1></li>
+    			<li><a href="index.php">Profile</a></li>
+    			<li><a href="index.php">Bookmarks</a></li>
+    			<li><a href="index.php">Contact Admin</a></li>
+    			<li><a href="index.php">Logout</a></li>
     		</ul>
     		<ul id="headerStats">
-    			<li>Total Online:100</li>
+    			<li>Online users:100</li>
     		</ul>
     	</div>
     
     
     
-    
-    </body>
-</html>
