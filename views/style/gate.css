@@ -1,0 +1,35 @@
+#login {
+	width:280px;
+    height:290px;
+    position:fixed;
+    margin-left:-140px; 
+    margin-top:-280px;  
+    top:50%;
+    left:50%;
+    border:2px solid #DDDDDD;
+    padding:10px;
+}
+label {
+	color:white;
+}
+input.submit {
+	border:none;
+    font-size: 105%;
+    width:75px;
+     
+}
+td#loginDeksia {
+	float:right;
+	padding-right:3px;
+}
+td#guestDeksia {
+	float:right;
+	padding-right:3px;
+	width:50px;
+}
+#guestLogin {
+	width:90px;
+}
+p {
+	color:white;
+}
