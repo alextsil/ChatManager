@@ -1,0 +1,47 @@
+
+body {
+    font-family: ‘Lucida Sans Unicode’, ‘Lucida Grande’, sans-serif;
+    background-color: #336699;
+	margin: 0;
+    padding: 0;
+}
+h1 {
+	text-decoration: none;
+    margin: 0;
+    padding: 0;
+    display:inline;
+}
+#topBar	{
+	margin: 0;
+	padding:0 0 3px 0;
+	border-bottom: 3px solid #DDDDDD;
+}	
+#headerMenu {
+	display: inline;
+	margin : 0;
+	padding : 0px 0 0px 13px;
+}
+#headerMenu li {
+	display: inline;
+	/* to pad-bottom einai gia epikalipsi tis mparas tou header */
+	padding : 100% 13px 8px 13px;
+}
+#headerMenu li:HOVER {
+	background-color: rgba(0, 0, 70, 0.6);
+}
+#headerMenu li h1 a {
+    margin-right:1%;
+    font-size: 90%;
+}
+#headerMenu li a {
+	padding:0 5px 0px 5px;
+	font-size: 120%;
+    text-decoration: none;
+    color : #EEEEEE
+}
+#headerStats {
+	float : right;
+	display : inline;
+	margin-right : 7px;
+	list-style: none;
+}
