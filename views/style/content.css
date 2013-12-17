@@ -1,0 +1,36 @@
+/* to position paei sto content gia na ta
+   sernei ola mazi */
+
+#content {
+	padding-top:15px;
+	margin-left:20%;
+	margin-right:25%;
+}
+#chatBox {
+	color:#EEEEEE;
+	list-style: none;
+	border:2px solid;
+	border-radius:30px;
+	overflow-y:auto;
+	word-wrap: break-word
+}
+#messageForm input {
+	margin-top:15px;
+	margin-bottom:0px;
+	width:95%;
+	/* kampilotes gonies */
+	border:none;
+	border-radius: 7px;
+	font-size: 105%;
+}
+#chatBox li {
+	padding:2px 0 2px 0;
+}
+#messageForm p {
+	color:#B5B5B5;
+	font-size:85%;
+	margin: 5px 0 5px 0;
+}
+.user {
+	color : #BBBBBB;
+}
