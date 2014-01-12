@@ -6,11 +6,14 @@
         <link rel="stylesheet" href="style.css" type="text/css" />
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script type="text/javascript" src="chat.js"></script>
+        <script type="text/javascript" src="users.js"></script>
         <script type="text/javascript">
-            var name = prompt("Enter your chat name:", "Guest");
+
+            var name = prompt("Enter username:", "Guest");
             if (!name || name === ' ') {
                 name = "Guest";
             }
+
             name = name.replace(/(<([^>]+)>)/ig, "");
 
             $.ajax({
@@ -20,11 +23,18 @@
                     'function': 'insertuser',
                     'username': name
                 },
-                dataType: "json"
+                dataType: "json",
+                success: function(data) {
+                    name = data.userName;
+                    setInterval('users.displayUsers()', 1000);
+                    //FIXME
+                    $("#name-area").text("Hello, " + name);
+                },
+                async: false
             });
 
-            $("#name-area").html("You are: <span>" + name + "</span>");
             var chat = new Chat();
+            var users = new Users();
 
             $(function() {
                 chat.getState();
@@ -54,18 +64,23 @@
                 });
             });
         </script>
+
+        <script>
+            window.onbeforeunload = function() {
+                users.goneOffline(name);
+            };
+        </script>
+
     </head>
     <body onload="setInterval('chat.update()', 1000)" background="images/bg.png">
+  
         <div id="page-wrap">
             <h2>Chat Manager</h2>
-            <p id="name-area"></p>
+            <div id="users-area" /> </div>
             <div id="chat-wrap">
-                <div id="chat-area" />
-            </div>
+            <div id="chat-area" /> </div> 
             <form id="send-message-area">
-                <p>Your message: </p>
-                <textarea id="sendie" maxlength="100"></textarea>
+                <textarea style="resize:none" placeholder="Your message" id="sendie" maxlength="100"></textarea>
             </form>
-        </div>
     </body>
 </html>

@@ -96,6 +96,53 @@ class ConversationDao {
         return $resArr;
     }
 
+    public function countUsers() {
+        $Conn = new connectToDb();
+        $MyConn = $Conn->connect();
+        $res = $MyConn->prepare("select count(*) from chatmanager.users");
+        $res->execute();
+        $res->bind_result($userCount);
+        $res->fetch();
+        $res->close();
+        $MyConn->close();
+        return $userCount;
+    }
+    
+    //afairei tous users KAI ta messages tou
+    //@param username
+    public function removeUser($inUser) {
+    	$userId = $this->getUserIdFromName($inUser);
+    	echo "works";
+    	$Conn = new connectToDb();
+    	$MyConn = $Conn->connect();
+    	//svinei messages tou user
+    	$stmt = $MyConn->prepare("DELETE FROM chatmanager.messages where sender_id=?");
+    	$stmt->bind_param("i", $userId);
+    	$stmt->execute();
+    	//ksekleidonei to foreign key
+    	$stmt = $MyConn->prepare("SET foreign_key_checks = 0");
+    	$stmt->execute();
+    	//svinei ton user
+    	$stmt = $MyConn->prepare("DELETE FROM users where id=?");
+    	$stmt->bind_param("i", $userId);
+    	$stmt->execute();
+    	//kleidonei to foreign key
+    	$stmt = $MyConn->prepare("SET foreign_key_checks = 1");
+    	$stmt->execute();
+    	
+    	$stmt->close();
+    	$MyConn->close();
+    }
+
+    public function isUserUnique($inUser) {
+    	$userId = $this->getUserIdFromName($inUser);
+    	if ($userId) {
+    		return 1;
+    	}
+    	else {
+    		return 0;
+    	}
+    }
 }
 
 ?>

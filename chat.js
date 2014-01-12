@@ -2,11 +2,14 @@
 var instanse = false;
 var state;
 
+
 function Chat() {
     this.update = updateChat;
     this.send = sendChat;
     this.getState = getStateOfChat;
+    this.displayUsers = displayOnlineUsers;
 }
+
 
 function getStateOfChat() {
     if (!instanse) {
@@ -40,7 +43,8 @@ function updateChat() {
             success: function(data) {
                 if (data.text) {
                     for (var i = 0; i < data.text.length; i++) {
-                        $('#chat-area').append($("<p>" + data.text[i] + "</p>"));
+                        $('#chat-area').append(("<p>" + data.text[i] + "</p>"));
+
                     }
                     var chatArea = document.getElementById('chat-area');
                     chatArea.scrollTop = chatArea.scrollHeight;
@@ -56,6 +60,7 @@ function updateChat() {
 }
 
 function sendChat(message, nickname) {
+    
     $.ajax({
         type: "POST",
         url: "process.php",
@@ -65,8 +70,10 @@ function sendChat(message, nickname) {
             'nickname': nickname
         },
         dataType: "json",
-        success: function(data) {
+        success: function() {
             updateChat();
         }
     });
 }
+
+
