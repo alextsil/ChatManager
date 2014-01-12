@@ -9,7 +9,7 @@
 	//testarw pws fenetai 
 	include 'db/conversationsMessagesDao.php';
 	
-	$dao = new conversationsMessagesDao();
+	$dao = new ConversationDao();
 	$tmpConv = $dao->getConversationById(2);
 	$tmpMsgArray = $tmpConv->getMessageList();
 	foreach ($tmpMsgArray as $curMsg) {
