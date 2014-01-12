@@ -77,6 +77,25 @@ class ConversationDao {
         $MyConn->close();
     }
 
+    public function getAllUsers() {
+        $Conn = new connectToDb();
+        $MyConn = $Conn->connect();
+        $res = $MyConn->prepare("SELECT * FROM chatmanager.users");
+        $res->execute();
+        $res->bind_result($uId, $uName);
+
+        $resArr = array();
+        $singleUserArray = array();
+        while ($res->fetch()) {
+            $singleUserArray['userID'] = $uId;
+            $singleUserArray['userName'] = $uName;
+            array_push($resArr, $singleUserArray);
+        }
+        $res->close();
+        $MyConn->close();
+        return $resArr;
+    }
+
 }
 
 ?>
