@@ -21,12 +21,13 @@ function displayOnlineUsers()
                 onlineUsers = data.onlineUsers;
                 for (var i = 0; i < data.users.length; i++) {
                      // $('#users-area').append("abc " + userIsUnique("Guest"));
-                    $('#users-area').append("<span>" + "<a href='#' onclick='window.open(this.href, 'pm', 'scrollbars,width=650,height=600'); return false'>" + data.users[i]['userName'] + "</a></span> ");
+                    $('#users-area').append("<span>" + "<a href =\"javascript:openNewWindow('"+ data.users[i]['userName']+"');\">"+ data.users[i]['userName'] + "</a></span> ");
                 }
             }
         }
     });
 }
+
 function hasGoneOffline(userName)
 {
     $.ajax({

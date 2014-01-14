@@ -9,17 +9,19 @@ $conversation = new ConversationDao();
 
 switch ($function) {
     case('getState'):
-        $log['state'] = $conversation->countPublicMessages();
+        $convID = $_POST['convID'];
+        $log['state'] = $conversation->countMessages($convID);
         break;
 
     case('update'):
         $state = $_POST['state'];
-        $count = $conversation->countPublicMessages();
+        $convID = htmlentities(strip_tags($_POST['convID']));
+        $count = $conversation->countMessages($convID);
         $log['state'] = $count;
         if ($state == $count) {
             $log['text'] = false;
         } else {
-            $lines = $conversation->getPublicMessages();
+            $lines = $conversation->getMessages($convID);
             $text = array();
             $log['state'] = count($lines);
             foreach ($lines as $line_num => $line) {
@@ -35,11 +37,12 @@ switch ($function) {
         $nickname = htmlentities(strip_tags($_POST['nickname']));
         $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
         $message = htmlentities(strip_tags($_POST['message']));
+        $convID = htmlentities(strip_tags($_POST['convID']));
         if (($message) != "\n") {
             if (preg_match($reg_exUrl, $message, $url)) {
                 $message = preg_replace($reg_exUrl, '<a href="' . $url[0] . '" target="_blank">' . $url[0] . '</a>', $message);
             }
-            $conversation->setPublicMessage($nickname, $message);
+            $conversation->setMessage($nickname, $message, $convID);
         }
         break;
 
@@ -53,7 +56,7 @@ switch ($function) {
             $tempName = $tempName . $counter;
         }
         $name = $tempName;
-        
+
         $conversation->insertUser($name);
         $log['userName'] = $name;
         break;
@@ -73,7 +76,25 @@ switch ($function) {
     case('userHasLeft'):
         $conversation->removeUser($_POST['userName']);
         break;
+
+    case('chatSession'):
+        $convID = $conversation->startPmConversation($_POST['user'], $_POST['peer']);
+        $log['convID'] = $convID;
+        break;
+
+    case('hasNewPM'):
+        $log['userName'] = $conversation->getPendingConversation($_POST['userName']);
+        break;
+
+    case('removeMessages'):
+        $conversation->deletePmsByConversationId($_POST['convID']);
+        break;
+
+    case('checkWindowActivity'):
+        $log['exists'] = $conversation->isTherePmAmongUsers($_POST['userName'], $_POST['peer']);
+        $log['key']=$_POST['peer'];
+        break;
 }
 
-echo json_encode($log);
+print json_encode($log);
 ?>

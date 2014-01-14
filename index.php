@@ -10,12 +10,60 @@
         <script type="text/javascript">
 
             var name = prompt("Enter username:", "Guest");
-            if (!name || name === ' ') {
+            if (!name || name === ' ' || name == "null") {
                 name = "Guest";
             }
 
             name = name.replace(/(<([^>]+)>)/ig, "");
 
+            var pmWindows = new Array();
+
+            function openNewWindow(userName) {
+                //var title = "pm #" + userName;
+                //var url = "pm.php?id=" + userName + "&name=" + name;
+
+                if (name !== userName) //&* conversation is unique
+                {
+                    if (pmWindows[userName] == null)
+                    {
+                        var convID;
+                        //start pm session
+                        $.ajax({
+                            type: "POST",
+                            url: "process.php",
+                            data: {
+                                'function': 'chatSession',
+                                'user': name,
+                                'peer': userName
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                convID = data.convID;
+                            },
+                            async: false
+                        });
+                        var title = "pm #" + userName;
+                        var url = "pm.php?id=" + userName + "&name=" + name + "&convid=" + convID;
+
+                        pmWindows[userName] = window.open(url, title, 'width=600,height=600');
+                        pmWindows[userName].onbeforeunload = function() {
+                            pmWindows[userName] = null;
+                            $.ajax({
+                                type: "POST",
+                                url: "process.php",
+                                data: {
+                                    'function': 'removeMessages',
+                                    'convID': convID
+                                },
+                                dataType: "json",
+                                async: false
+                            });
+                        }
+                    }
+                }
+            }
+
+            //add user to db
             $.ajax({
                 type: "POST",
                 url: "process.php",
@@ -27,13 +75,65 @@
                 success: function(data) {
                     name = data.userName;
                     setInterval('users.displayUsers()', 1000);
-                    //FIXME
-                    $("#name-area").text("Hello, " + name);
+                    //fixme
+                    document.write("<h1>Hello, " + name + "</h1>");
                 },
                 async: false
             });
 
-            var chat = new Chat();
+            //check for pms
+            function checkforPMs()
+            {
+                $.ajax({
+                    type: "POST",
+                    url: "process.php",
+                    data: {
+                        'function': 'hasNewPM',
+                        'userName': name
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        //$("#chat-area").append(("<p>dsadas</p>"));
+                        if (data.userName != "0")
+                        {
+                            for (var i = 0; i < data.userName[i].length; i++)
+                                openNewWindow(data.userName[i]);
+                        }
+                    }
+                });
+            }
+            setInterval('checkforPMs()', 1500);
+
+            function checkWindowActivity()
+            {
+                for (var key in pmWindows)
+                {
+                    if (pmWindows[key] != null)
+                    {
+                        //$("#chat-area").append(("<p>open windows: " + key + "</p>"));
+                        $.ajax({
+                            type: "POST",
+                            url: "process.php",
+                            data: {
+                                'function': 'checkWindowActivity',
+                                'userName': name,
+                                'peer': key
+                            },
+                            dataType: "json",
+                            success: function(data) {
+                                if (data.exists == "0")
+                                {
+                                    pmWindows[data.key].close();
+                                    pmWindows[data.key] = null;
+                                }
+                            },
+                        });
+                    }
+                }
+            }
+            setInterval('checkWindowActivity()', 1000);
+
+            var chat = new Chat("chat-area", "1");
             var users = new Users();
 
             $(function() {
@@ -65,7 +165,7 @@
             });
         </script>
 
-        <script>
+        <script type="text/javascript">
             window.onbeforeunload = function() {
                 users.goneOffline(name);
             };
@@ -73,14 +173,13 @@
 
     </head>
     <body onload="setInterval('chat.update()', 1000)" background="images/bg.png">
-  
         <div id="page-wrap">
-            <h2>Chat Manager</h2>
+            <h2>Chat Manager - Public</h2>
             <div id="users-area" /> </div>
-            <div id="chat-wrap">
+        <div id="chat-wrap">
             <div id="chat-area" /> </div> 
-            <form id="send-message-area">
-                <textarea style="resize:none" placeholder="Your message" id="sendie" maxlength="100"></textarea>
-            </form>
+        <form id="send-message-area">
+            <textarea style="resize:none" placeholder="Your message" id="sendie" maxlength="100"></textarea>
+        </form>
     </body>
 </html>

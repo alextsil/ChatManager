@@ -1,24 +1,26 @@
 
 var instanse = false;
 var state;
+var chatarea;
+var convID;
 
-
-function Chat() {
+function Chat(appendingarea, conversationID) {
+    chatarea = appendingarea;
+    convID = conversationID;
     this.update = updateChat;
     this.send = sendChat;
-    this.getState = getStateOfChat;
-    this.displayUsers = displayOnlineUsers;
+    this.getState = getStateOfChat;             
 }
-
 
 function getStateOfChat() {
     if (!instanse) {
         instanse = true;
         $.ajax({
-            type: "POST",
-            url: "process.php",
+            'type': "POST",
+            'url': "process.php",
             data: {
-                'function': 'getState'
+                'function': 'getState',
+                'convID': convID
             },
             dataType: "json",
             success: function(data) {
@@ -37,17 +39,17 @@ function updateChat() {
             url: "process.php",
             data: {
                 'function': 'update',
-                'state': state
+                'state': state,
+                'convID': convID
             },
             dataType: "json",
             success: function(data) {
                 if (data.text) {
                     for (var i = 0; i < data.text.length; i++) {
-                        $('#chat-area').append(("<p>" + data.text[i] + "</p>"));
-
+                        $("#" + chatarea).append(("<p>" + data.text[i] + "</p>"));
                     }
-                    var chatArea = document.getElementById('chat-area');
-                    chatArea.scrollTop = chatArea.scrollHeight;
+                    var chatAreaElement = document.getElementById(chatarea);
+                    chatAreaElement.scrollTop = chatAreaElement.scrollHeight;
                 }
                 instanse = false;
                 state = data.state;
@@ -60,14 +62,14 @@ function updateChat() {
 }
 
 function sendChat(message, nickname) {
-    
     $.ajax({
         type: "POST",
         url: "process.php",
         data: {
             'function': 'send',
             'message': message,
-            'nickname': nickname
+            'nickname': nickname,
+            'convID': convID
         },
         dataType: "json",
         success: function() {
