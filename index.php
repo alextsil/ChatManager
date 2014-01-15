@@ -4,37 +4,33 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Chat Manager</title>
         <link rel="stylesheet" href="style.css" type="text/css" />
+
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script type="text/javascript" src="chat.js"></script>
         <script type="text/javascript" src="users.js"></script>
         <script type="text/javascript">
 
-            var name = prompt("Enter username:", "Guest");
-            if (!name || name === ' ' || name == "null") {
-                name = "Guest";
+            var nickname = prompt("Enter nickname:", "Guest");
+            if (!nickname || nickname === ' ' || nickname == "null") {
+                nickname = "Guest";
             }
-
-            name = name.replace(/(<([^>]+)>)/ig, "");
-
+            nickname = nickname.replace(/(<([^>]+)>)/ig, "");
             var pmWindows = new Array();
 
-            function openNewWindow(userName) {
-                //var title = "pm #" + userName;
-                //var url = "pm.php?id=" + userName + "&name=" + name;
-
-                if (name !== userName) //&* conversation is unique
+            function openNewPMwindow(receiverNickname) {
+                if (nickname !== receiverNickname) //conversation is unique
                 {
-                    if (pmWindows[userName] == null)
+                    if (pmWindows[receiverNickname] == null)
                     {
                         var convID;
                         //start pm session
                         $.ajax({
                             type: "POST",
-                            url: "process.php",
+                            url: "chatHandler.php",
                             data: {
-                                'function': 'chatSession',
-                                'user': name,
-                                'peer': userName
+                                'event': 'chatSession',
+                                'user': nickname,
+                                'peer': receiverNickname
                             },
                             dataType: "json",
                             success: function(data) {
@@ -42,82 +38,86 @@
                             },
                             async: false
                         });
-                        var title = "pm #" + userName;
-                        var url = "pm.php?id=" + userName + "&name=" + name + "&convid=" + convID;
+                        var title = "pm #" + receiverNickname;
+                        var url = "pm.php?id=" + receiverNickname + "&name=" + nickname + "&convid=" + convID;
 
-                        pmWindows[userName] = window.open(url, title, 'width=600,height=600');
-                        pmWindows[userName].onbeforeunload = function() {
-                            pmWindows[userName] = null;
+                        //open popup window
+                        pmWindows[receiverNickname] = window.open(url, title, 'width=600,height=600');
+                        pmWindows[receiverNickname].onbeforeunload = function() {
                             $.ajax({
                                 type: "POST",
-                                url: "process.php",
+                                url: "chatHandler.php",
                                 data: {
-                                    'function': 'removeMessages',
+                                    'event': 'removeMessages',
                                     'convID': convID
                                 },
                                 dataType: "json",
                                 async: false
                             });
-                        }
+                            pmWindows[receiverNickname] = null;
+                        };
                     }
                 }
             }
 
+            var users = new Users();
             //add user to db
             $.ajax({
                 type: "POST",
-                url: "process.php",
+                url: "chatHandler.php",
                 data: {
-                    'function': 'insertuser',
-                    'username': name
+                    'event': 'insertuser',
+                    'username': nickname
                 },
                 dataType: "json",
                 success: function(data) {
-                    name = data.userName;
+                    nickname = data.userName;
                     setInterval('users.displayUsers()', 1000);
-                    //fixme
-                    document.write("<h1>Hello, " + name + "</h1>");
+
                 },
                 async: false
             });
 
+            function setTitle()
+            {
+                document.getElementById("name-area").innerHTML = "Welcome to ChatManager " + nickname;
+            }
             //check for pms
             function checkforPMs()
             {
                 $.ajax({
                     type: "POST",
-                    url: "process.php",
+                    url: "chatHandler.php",
                     data: {
-                        'function': 'hasNewPM',
-                        'userName': name
+                        'event': 'hasNewPM',
+                        'userName': nickname
                     },
                     dataType: "json",
                     success: function(data) {
-                        //$("#chat-area").append(("<p>dsadas</p>"));
                         if (data.userName != "0")
                         {
                             for (var i = 0; i < data.userName[i].length; i++)
-                                openNewWindow(data.userName[i]);
+                            {
+                                openNewPMwindow(data.userName[i]);
+                            }
                         }
                     }
                 });
             }
-            setInterval('checkforPMs()', 1500);
 
-            function checkWindowActivity()
+            function checkPMwindowsActivity()
             {
-                for (var key in pmWindows)
+                for (var receiverNickname in pmWindows)
                 {
-                    if (pmWindows[key] != null)
+                    if (pmWindows[receiverNickname] != null)
                     {
-                        //$("#chat-area").append(("<p>open windows: " + key + "</p>"));
                         $.ajax({
                             type: "POST",
-                            url: "process.php",
+                            url: "chatHandler.php",
                             data: {
-                                'function': 'checkWindowActivity',
-                                'userName': name,
-                                'peer': key
+                                'event': 'checkWindowActivity',
+                                'userName': nickname,
+                                'peer': receiverNickname
                             },
                             dataType: "json",
                             success: function(data) {
@@ -126,15 +126,18 @@
                                     pmWindows[data.key].close();
                                     pmWindows[data.key] = null;
                                 }
-                            },
+                            }
                         });
                     }
                 }
             }
-            setInterval('checkWindowActivity()', 1000);
 
+            setInterval('checkforPMs()', 1500);
+            setInterval('checkPMwindowsActivity()', 1000);
+        </script>
+
+        <script type="text/javascript">
             var chat = new Chat("chat-area", "1");
-            var users = new Users();
 
             $(function() {
                 chat.getState();
@@ -155,7 +158,7 @@
                         var maxLength = $(this).attr("maxlength");
                         var length = text.length;
                         if (length <= maxLength + 1) {
-                            chat.send(text, name);
+                            chat.send(text, nickname);
                             $(this).val("");
                         } else {
                             $(this).val(text.substring(0, maxLength));
@@ -163,18 +166,15 @@
                     }
                 });
             });
-        </script>
 
-        <script type="text/javascript">
             window.onbeforeunload = function() {
-                users.goneOffline(name);
+                users.goneOffline(nickname);
             };
         </script>
-
     </head>
-    <body onload="setInterval('chat.update()', 1000)" background="images/bg.png">
+    <body onload="setInterval('chat.update()', 1000), setTitle()">
         <div id="page-wrap">
-            <h2>Chat Manager - Public</h2>
+            <h2 id="name-area"></h2>
             <div id="users-area" /> </div>
         <div id="chat-wrap">
             <div id="chat-area" /> </div> 

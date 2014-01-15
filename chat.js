@@ -1,5 +1,4 @@
-
-var instanse = false;
+var onTransaction = false;
 var state;
 var chatarea;
 var convID;
@@ -9,36 +8,36 @@ function Chat(appendingarea, conversationID) {
     convID = conversationID;
     this.update = updateChat;
     this.send = sendChat;
-    this.getState = getStateOfChat;             
+    this.getState = getStateOfChat;
 }
 
 function getStateOfChat() {
-    if (!instanse) {
-        instanse = true;
+    if (!onTransaction) {
+        onTransaction = true;
         $.ajax({
             'type': "POST",
-            'url': "process.php",
+            'url': "chatHandler.php",
             data: {
-                'function': 'getState',
+                'event': 'getState',
                 'convID': convID
             },
             dataType: "json",
             success: function(data) {
                 state = data.state;
-                instanse = false;
+                onTransaction = false;
             }
         });
     }
 }
 
 function updateChat() {
-    if (!instanse) {
-        instanse = true;
+    if (!onTransaction) {
+        onTransaction = true;
         $.ajax({
             type: "POST",
-            url: "process.php",
+            url: "chatHandler.php",
             data: {
-                'function': 'update',
+                'event': 'update',
                 'state': state,
                 'convID': convID
             },
@@ -51,7 +50,7 @@ function updateChat() {
                     var chatAreaElement = document.getElementById(chatarea);
                     chatAreaElement.scrollTop = chatAreaElement.scrollHeight;
                 }
-                instanse = false;
+                onTransaction = false;
                 state = data.state;
             }
         });
@@ -64,9 +63,9 @@ function updateChat() {
 function sendChat(message, nickname) {
     $.ajax({
         type: "POST",
-        url: "process.php",
+        url: "chatHandler.php",
         data: {
-            'function': 'send',
+            'event': 'send',
             'message': message,
             'nickname': nickname,
             'convID': convID

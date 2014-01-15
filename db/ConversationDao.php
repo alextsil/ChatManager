@@ -17,7 +17,7 @@ class ConversationDao {
 
         $resArr = array();
         while ($stmt->fetch()) {
-            $singleLine = "<span class='user'>" . $senName . "</span> : " . $txt;
+            $singleLine = "<span class='user'>" . $senName . "</span>  " . $txt;
             array_push($resArr, $singleLine);
         }
         $stmt->close();
@@ -289,5 +289,7 @@ class ConversationDao {
     }
 
 }
+
+
 
 ?>

@@ -6,22 +6,20 @@
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script type="text/javascript" src="chat.js"></script>
         <script type="text/javascript">
-            var name = <?php
+            var nickname = <?php
 $title = urldecode($_GET["name"]);
-echo json_encode($title);
+print json_encode($title);
 ?>;
-            var otherName = <?php
+            var senderNickname = <?php
 $title = urldecode($_GET["id"]);
-echo json_encode($title);
+print json_encode($title);
 ?>;
             var convID = <?php
 $title = urldecode($_GET["convid"]);
-echo json_encode($title);
+print json_encode($title);
 ?>;
 
-
-            var chat = new Chat(name, convID);
-
+            var chat = new Chat(nickname, convID);
             $(function() {
                 chat.getState();
                 $("#sendie").keydown(function(event) {
@@ -41,7 +39,7 @@ echo json_encode($title);
                         var maxLength = $(this).attr("maxlength");
                         var length = text.length;
                         if (length <= maxLength + 1) {
-                            chat.send(text, name);
+                            chat.send(text, nickname);
                             $(this).val("");
                         } else {
                             $(this).val(text.substring(0, maxLength));
@@ -49,25 +47,24 @@ echo json_encode($title);
                     }
                 });
             });
-
         </script>
     </head>
 
-    <body onload="setInterval('chat.update()', 1000)" background="images/bg.png">
-        <div id="page-wrap">
-            <?php
-            $title = urldecode($_GET["id"]);
-            echo "<h2>" . $title . "</h2>";
-            ?>
+    <body onload="setInterval('chat.update()', 1000)">
+          <div id="page-wrap"/>
+                  <?php
+                    $title = urldecode($_GET["id"]);
+                    echo "<h2>" . $title . "</h2>";
+                  ?>
+          
             <div class="pmchat-wrap" >
                 <?php
-                $title = urldecode($_GET["name"]);
-                echo "<div class='pmchat-area' id='" . $title . "'/> </div>";
+                    $title = urldecode($_GET["name"]);
+                    echo "<div class='pmchat-area' id='" . $title . "'/> </div>";
                 ?>
                 <form id="send-message-area">
                     <textarea style="resize:none" placeholder="Your message" id="sendie" maxlength="100"></textarea>
                 </form>
             </div>
     </body>
-
 </html>

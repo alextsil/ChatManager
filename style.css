@@ -1,110 +1,96 @@
 * {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-	font: 12px "Lucida Grande", Sans-Serif;
-	background: url(images/bg.png);
-	min-width:420px;
-	min-height:500px; 
+    font: 15px "Calibri", Sans-Serif;
+    background: #659CEF;
+    min-width:420px;
+    min-height:500px; 
 }
 
 h2 {
-	color: white;
-	font: 30px Helvetica, Sans-Serif;
-	margin: 0 0 10px 0;
+    color: white;
+    font: 30px Calibri, Sans-Serif;
+    margin: 0 0 10px 0;
 }
 
 #page-wrap {
-	width: 50%;
-	height:80%;
-	margin: auto;
-	top:50px;
-	position: relative;
+    width: 50%;
+    height:80%;
+    margin: auto;
+    top:50px;
+    position: relative;
 }
 
 #chat-wrap {
-	border: 1px solid #eee;
-	margin: 0 0 0px 0;
+    border: 1px solid  #659CEF;
+    margin: 0 0 0px 0;
 }
 
 #chat-area {
-	height: 380px;
-	overflow: auto;
-	border: 1px solid #666;
-	padding: 20px;
-	background: #FFFFFF;
+    height: 380px;
+    overflow: auto;
+    padding: 20px;
+    background: #FFFFFF;
 }
-.pmchat-wrap                      { border: 1px solid #eee; margin: 0 0 0px 0;}
-.pmchat-area                      { height: 300px; overflow: auto; border: 1px solid #666; padding: 20px; background: white; }
-.pmchat-area span                 { color: white; background: #333; padding: 4px 8px; -moz-border-radius: 5px; -webkit-border-radius: 8px; margin: 0 5px 0 0; }
+.pmchat-wrap                      {  margin: 0 0 1px 0;}
+.pmchat-area                      { height: 300px; overflow: auto; padding: 20px; background: white; }
+.pmchat-area span                 { color: white; background: #333; padding: 4px 8px; margin: 0 4px 0px 0;}
 .pmchat-area p                    { padding: 8px 0; border-bottom: 1px solid #ccc; }
 
 #users-area {
-	max-height: 50px;
-	overflow: auto;
-	border: 1px solid #666;
-	padding: 15px 15px 20px 15px;
-	background: black;
-	opacity:0.9;
+    max-height: 50px;
+    overflow: auto;
+    padding: 5px 5px 5px 5px;
+    background: black;
+    opacity:0.9;
+    height: 90px;
 }
+a:link {color:#000; text-decoration:none;}     
+a:visited {color:#000; text-decoration:none;}
+a:hover{color:#000; text-decoration:none;  font-weight:bold; font-size: 14px;}
 
 #users-area span {
-	display: inline-block;
-	color: black;
-	background: white;
-	padding: 4px 8px;
-	border: 2px solid white;
-	border-bottom-right-radius:10px;
-	margin: 0 4px 5px 0;
+    display: inline-block;
+    color: black;
+    background: white;
+    padding: 4px 4px;
+    border: 2px solid white;
+    margin: 0 4px 5px 0;
 }
 #chat-area {
-	line-height:150%; /* gia na min kolaei h 2h grammh sto text me to onoma */
-	border-bottom-right-radius:30px;
+    line-height:150%; /* gia na min kolaei h 2h grammh sto text me to onoma */
+    //   border-bottom-right-radius:30px;
+
 }
 #chat-area span {
-	color: white;
-	background: #333;
-	padding: 4px 8px;
-	margin: 0 5px 0 0;
-	border-bottom-right-radius:10px;
+    color: white;
+    background: #333;
+    padding: 4px 8px;
+    margin: 0 4px 0px 0;
 }
 
 #chat-area p {
-	padding: 6px 0px 4px 0px;
-	border-bottom: 1px solid #ccc;
+    padding: 6px 0px 4px 0px;
+    border-bottom: 1px solid #ccc;
 }
 
-#name-area {
-	position: absolute;
-	top: 12px;
-	right: 0;
-	color: white;
-	font: bold 14px "Lucida Grande", Sans-Serif;
-	text-align: right;
-}
 
-#name-area span {
-	color: #fa9f00;
-}
-
-	
 #send-message-area p {
-	float: left;
-	color: white;
-	padding-top: 27px;
-	font-size: 14px;
-	word-wrap:break-word;		
+    float: left;
+    color: white;
+    padding-top: 27px;
+    font-size: 14px;
+    word-wrap:break-word;		
 }
 
 #sendie {
-	opacity:0.95;
-	border-bottom-right-radius:30px;
-	margin:1px 0 0 -1px;
-	color: black;
-	width: 90%;
-	padding:10px;
-	font: 12px "Lucida Grande", Sans-Serif;
-	float: left;
+    opacity:0.95;
+    margin:1px 0 0 -1px;
+    color: black;
+    width: 100%;
+    font: 14px "Calibri", Sans-Serif;
+
 }
